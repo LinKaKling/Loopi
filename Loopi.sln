@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoopiAvalonia", "Loopitest\LoopiAvalonia.csproj", "{21FE50A2-C39A-4D21-A8E3-FA4F025F59ED}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6C77D80C-E741-48C4-A3F1-9F1AC52204D3} = {6C77D80C-E741-48C4-A3F1-9F1AC52204D3}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoopiBusines", "LoopiBusines\LoopiBusines.csproj", "{6C77D80C-E741-48C4-A3F1-9F1AC52204D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{21FE50A2-C39A-4D21-A8E3-FA4F025F59ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21FE50A2-C39A-4D21-A8E3-FA4F025F59ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21FE50A2-C39A-4D21-A8E3-FA4F025F59ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21FE50A2-C39A-4D21-A8E3-FA4F025F59ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C77D80C-E741-48C4-A3F1-9F1AC52204D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C77D80C-E741-48C4-A3F1-9F1AC52204D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C77D80C-E741-48C4-A3F1-9F1AC52204D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C77D80C-E741-48C4-A3F1-9F1AC52204D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3FB1EBC7-4418-4A85-8314-32FB82C9ADF6}
+	EndGlobalSection
+EndGlobal
