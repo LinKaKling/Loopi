@@ -82,7 +82,6 @@ namespace Loopitest.ViewModels
                 while (outputDevice.PlaybackState == PlaybackState.Playing)
                 {
                     Thread.Sleep(100);
-                    //outputDevice.Stop;
                 }
             }
         }
