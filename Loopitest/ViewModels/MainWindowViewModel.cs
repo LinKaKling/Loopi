@@ -9,6 +9,7 @@ using NAudio.Wave;
 using ReactiveUI;
 using System;
 using System.Windows.Input;
+using System.Threading;
 
 namespace Loopitest.ViewModels
 {
@@ -19,10 +20,14 @@ namespace Loopitest.ViewModels
         public ICommand StartCommand { get; }
         public ICommand StopCommand { get; }
 
+        public ICommand PlayCommand { get; }
+
         public MainWindowViewModel()
         {
             StartCommand = ReactiveCommand.Create(Start);
             StopCommand = ReactiveCommand.Create(Stop);
+            PlayCommand = ReactiveCommand.Create(Play);
+
         }
 
         private void Start()
@@ -64,6 +69,21 @@ namespace Loopitest.ViewModels
             {
                 waveFile.Dispose();
                 waveFile = null;
+            }
+        }
+
+        private void Play()
+        {
+            using (var audioFile = new AudioFileReader("C:\\Temp\\Test0001.wav"))
+            using (var outputDevice = new WaveOutEvent())
+            {
+                outputDevice.Init(audioFile);
+                outputDevice.Play();
+                while (outputDevice.PlaybackState == PlaybackState.Playing)
+                {
+                    Thread.Sleep(100);
+                    //outputDevice.Stop;
+                }
             }
         }
     }
