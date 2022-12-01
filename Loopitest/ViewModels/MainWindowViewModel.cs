@@ -1,4 +1,9 @@
-﻿
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using NAudio.CoreAudioApi;
+using NAudio.Wave;
 using Microsoft.VisualBasic;
 using NAudio.Wave;
 using ReactiveUI;
@@ -9,19 +14,20 @@ namespace Loopitest.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private IWaveIn waveSource = null;
-        private WaveFileWriter waveFile = null;
+        private IWaveIn? waveSource;
+        private WaveFileWriter? waveFile;
         public ICommand StartCommand { get; }
         public ICommand StopCommand { get; }
 
         public MainWindowViewModel()
         {
             StartCommand = ReactiveCommand.Create(Start);
+            StopCommand = ReactiveCommand.Create(Stop);
         }
 
         private void Start()
         {
-            waveSource = new WaveIn();
+            waveSource = new NAudio.Wave.WaveInEvent();
             waveSource.WaveFormat = new WaveFormat(44100, 1);
 
             waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
@@ -32,12 +38,12 @@ namespace Loopitest.ViewModels
             waveSource.StartRecording();
         }
 
-        private void Stop(object sender, EventArgs e)
+        private void Stop()
         {
-            waveSource.StopRecording();
+            waveSource?.StopRecording();
         }
 
-        void waveSource_DataAvailable(object sender, WaveInEventArgs e)
+        public void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
             if (waveFile != null)
             {
@@ -46,7 +52,7 @@ namespace Loopitest.ViewModels
             }
         }
 
-        void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
+        public void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
         {
             if (waveSource != null)
             {
@@ -59,8 +65,6 @@ namespace Loopitest.ViewModels
                 waveFile.Dispose();
                 waveFile = null;
             }
-
-            StartBtn.Enabled = true;
         }
     }
 }

@@ -11,7 +11,11 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+	<Grid>
+		<StackPanel>
+            <TextBlock Text="Greeting" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			<Button Content="Start" Command="{Binding StartCommand}"/>
+			<Button Content="Stop" Command="{Binding StopCommand}"/>
+		</StackPanel>
+	</Grid>
 </Window>
