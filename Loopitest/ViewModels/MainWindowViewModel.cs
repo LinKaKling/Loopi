@@ -17,6 +17,8 @@ namespace Loopitest.ViewModels
     {
         private IWaveIn? waveSource;
         private WaveFileWriter? waveFile;
+        private bool isRecording;
+
         public ICommand StartCommand { get; }
         public ICommand StopCommand { get; }
 
@@ -27,10 +29,10 @@ namespace Loopitest.ViewModels
             StartCommand = ReactiveCommand.Create(Start);
             StopCommand = ReactiveCommand.Create(Stop);
             PlayCommand = ReactiveCommand.Create(Play);
-
+            StartRecording();
         }
 
-        private void Start()
+        private void StartRecording()
         {
             waveSource = new NAudio.Wave.WaveInEvent();
             waveSource.WaveFormat = new WaveFormat(44100, 1);
@@ -43,14 +45,20 @@ namespace Loopitest.ViewModels
             waveSource.StartRecording();
         }
 
+        private void Start()
+        {
+            isRecording = true;
+        }
+
         private void Stop()
         {
             waveSource?.StopRecording();
+            isRecording = false;
         }
 
         public void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (waveFile != null)
+            if (waveFile != null && isRecording)
             {
                 waveFile.Write(e.Buffer, 0, e.BytesRecorded);
                 waveFile.Flush();
