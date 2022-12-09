@@ -14,8 +14,11 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 	<StackPanel>
+		<TextBlock Text="Sound1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 		<v:ButtonControl DataContext="{Binding ButtonVM1}"/>
+		<TextBlock Text="Sound2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 		<v:ButtonControl DataContext="{Binding ButtonVM2}"/>
+		<TextBlock Text="Sound3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 		<v:ButtonControl DataContext="{Binding ButtonVM2}"/>
 	</StackPanel>
 </Window>

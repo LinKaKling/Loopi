@@ -11,7 +11,7 @@ using System;
 using System.Windows.Input;
 using System.Threading;
 
-
+//start Recording wieder an den anfang?
 namespace LoopiAvalonia.ViewModels
 {
     public class ButtonControlViewModel
