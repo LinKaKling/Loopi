@@ -7,7 +7,7 @@
 
 
 	<StackPanel>
-		<TextBlock Text="Greeting" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		<TextBlock Text="SoundnameToBeAdded" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 		<Button Content="Start" Command="{Binding StartCommand}"/>
 		<Button Content="Stop" Command="{Binding StopCommand}"/>
 		<Button Content="Play" Command="{Binding PlayCommand}"/>

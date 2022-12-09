@@ -19,17 +19,26 @@ namespace LoopiAvalonia.ViewModels
         private IWaveIn? waveSource;
         private WaveFileWriter? waveFile;
         private bool isRecording;
-
+        public string path;
         public ICommand StartCommand { get; }
         public ICommand StopCommand { get; }
         public ICommand PlayCommand { get; }
 
         public ButtonControlViewModel()
         {
+            path = "C:\\Temp\\Test0001.wav";
             StartCommand = ReactiveCommand.Create(Start);
             StopCommand = ReactiveCommand.Create(Stop);
             PlayCommand = ReactiveCommand.Create(Play);
-            StartRecording();
+            //StartRecording();
+        }
+        public ButtonControlViewModel(string pathToFile)
+        {
+            path = pathToFile;
+            StartCommand = ReactiveCommand.Create(Start);
+            StopCommand = ReactiveCommand.Create(Stop);
+            PlayCommand = ReactiveCommand.Create(Play);
+            
         }
 
         private void StartRecording()
@@ -40,13 +49,14 @@ namespace LoopiAvalonia.ViewModels
             waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
             waveSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
 
-            waveFile = new WaveFileWriter(@"C:\Temp\Test0001.wav", waveSource.WaveFormat);
+            waveFile = new WaveFileWriter(@path, waveSource.WaveFormat);
 
             waveSource.StartRecording();
         }
 
         private void Start()
         {
+            StartRecording();
             isRecording = true;
         }
 
@@ -82,7 +92,7 @@ namespace LoopiAvalonia.ViewModels
 
         private void Play()
         {
-            using (var audioFile = new AudioFileReader("C:\\Temp\\Test0001.wav"))
+            using (var audioFile = new AudioFileReader(path))
             using (var outputDevice = new WaveOutEvent())
             {
                 outputDevice.Init(audioFile);
