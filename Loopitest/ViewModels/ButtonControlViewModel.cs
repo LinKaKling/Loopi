@@ -12,7 +12,8 @@ namespace LoopiAvalonia.ViewModels
         private IWaveIn? waveSource;
         private WaveFileWriter? waveFile;
         private bool isRecording;
-        public string path;
+        private string path;
+
         public ICommand StartCommand { get; }
         public ICommand StopCommand { get; }
         public ICommand PlayCommand { get; }
@@ -28,6 +29,8 @@ namespace LoopiAvalonia.ViewModels
             StartCommand = ReactiveCommand.Create(Start);
             StopCommand = ReactiveCommand.Create(Stop);
             PlayCommand = ReactiveCommand.Create(Play);
+
+            StartRecording();
         }
 
         private void StartRecording()
@@ -45,7 +48,6 @@ namespace LoopiAvalonia.ViewModels
 
         private void Start()
         {
-            StartRecording();
             isRecording = true;
         }
 
@@ -55,7 +57,7 @@ namespace LoopiAvalonia.ViewModels
             isRecording = false;
         }
 
-        public void waveSource_DataAvailable(object sender, WaveInEventArgs e)
+        private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
             if (waveFile != null && isRecording)
             {
@@ -64,7 +66,7 @@ namespace LoopiAvalonia.ViewModels
             }
         }
 
-        public void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
+        private void waveSource_RecordingStopped(object sender, StoppedEventArgs e)
         {
             if (waveSource != null)
             {
