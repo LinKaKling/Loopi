@@ -17,9 +17,9 @@ namespace Loopitest.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private string path1 = "C:\\Temp\\Test0001.wav";
-        private string path2 = "C:\\Temp\\Test0002.wav";
-        private string path3 = "C:\\Temp\\Test0003.wav";
+        private string path1 = "C:\\Temp\\Test0001";
+        private string path2 = "C:\\Temp\\Test0002";
+        private string path3 = "C:\\Temp\\Test0003";
         public ButtonControlViewModel ButtonVM1 { get; set; }
         public ButtonControlViewModel ButtonVM2 { get; set; }
         public ButtonControlViewModel ButtonVM3 { get; set; }

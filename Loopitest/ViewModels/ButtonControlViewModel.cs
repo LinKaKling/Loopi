@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
 using ReactiveUI;
 using System;
+using System.IO;
 using System.Threading;
 using System.Windows.Input;
 
@@ -9,23 +10,31 @@ namespace LoopiAvalonia.ViewModels
 {
     public class ButtonControlViewModel
     {
+        private static readonly string fileEnding = ".Wav";
+        private static readonly string tempSuffix = "_temp";
+        private static readonly string backupSuffix = "_backup";
         private IWaveIn? waveSource;
         private WaveFileWriter? waveFile;
         private bool isRecording;
         private string path;
+
+        private string FinalFile => path + fileEnding;
+        private string TempFile => path + tempSuffix + fileEnding;
+        private string BackupFile => path + backupSuffix + fileEnding;
 
         public ICommand StartCommand { get; }
         public ICommand StopCommand { get; }
         public ICommand PlayCommand { get; }
 
         public ButtonControlViewModel()
-            : this("C:\\Temp\\Test0001.wav")
+            : this("C:\\Temp\\Test0001")
         {
         }
 
         public ButtonControlViewModel(string pathToFile)
         {
             path = pathToFile;
+
             StartCommand = ReactiveCommand.Create(Start);
             StopCommand = ReactiveCommand.Create(Stop);
             PlayCommand = ReactiveCommand.Create(Play);
@@ -41,7 +50,7 @@ namespace LoopiAvalonia.ViewModels
             waveSource.DataAvailable += new EventHandler<WaveInEventArgs>(waveSource_DataAvailable);
             waveSource.RecordingStopped += new EventHandler<StoppedEventArgs>(waveSource_RecordingStopped);
 
-            waveFile = new WaveFileWriter(@path, waveSource.WaveFormat);
+            waveFile = new WaveFileWriter(TempFile, waveSource.WaveFormat);
 
             waveSource.StartRecording();
         }
@@ -55,6 +64,20 @@ namespace LoopiAvalonia.ViewModels
         {
             waveSource?.StopRecording();
             isRecording = false;
+        }
+
+        private void TempToFinal()
+        {
+            var finalInfo = new FileInfo(FinalFile);
+            var tempInfo = new FileInfo(TempFile);
+
+            if (finalInfo.Exists)
+            {
+                tempInfo.Replace(FinalFile, BackupFile);
+                tempInfo.Delete();
+            }
+            else
+                tempInfo.MoveTo(FinalFile);
         }
 
         private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
@@ -79,11 +102,14 @@ namespace LoopiAvalonia.ViewModels
                 waveFile.Dispose();
                 waveFile = null;
             }
+
+            TempToFinal();
+            StartRecording();
         }
 
         private void Play()
         {
-            using (var audioFile = new AudioFileReader(path))
+            using (var audioFile = new AudioFileReader(FinalFile))
             using (var outputDevice = new WaveOutEvent())
             {
                 outputDevice.Init(audioFile);
