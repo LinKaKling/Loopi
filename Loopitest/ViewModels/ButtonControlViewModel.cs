@@ -1,15 +1,8 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using NAudio.CoreAudioApi;
-using NAudio.Wave;
-using Microsoft.VisualBasic;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using ReactiveUI;
 using System;
-using System.Windows.Input;
 using System.Threading;
+using System.Windows.Input;
 
 //start Recording wieder an den anfang?
 namespace LoopiAvalonia.ViewModels
@@ -25,20 +18,16 @@ namespace LoopiAvalonia.ViewModels
         public ICommand PlayCommand { get; }
 
         public ButtonControlViewModel()
+            : this("C:\\Temp\\Test0001.wav")
         {
-            path = "C:\\Temp\\Test0001.wav";
-            StartCommand = ReactiveCommand.Create(Start);
-            StopCommand = ReactiveCommand.Create(Stop);
-            PlayCommand = ReactiveCommand.Create(Play);
-            //StartRecording();
         }
+
         public ButtonControlViewModel(string pathToFile)
         {
             path = pathToFile;
             StartCommand = ReactiveCommand.Create(Start);
             StopCommand = ReactiveCommand.Create(Stop);
             PlayCommand = ReactiveCommand.Create(Play);
-            
         }
 
         private void StartRecording()
