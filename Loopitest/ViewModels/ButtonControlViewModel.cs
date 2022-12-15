@@ -109,16 +109,19 @@ namespace LoopiAvalonia.ViewModels
 
         private void Play()
         {
-            using (var audioFile = new AudioFileReader(FinalFile))
-            using (var outputDevice = new WaveOutEvent())
+            new Thread(() =>
             {
-                outputDevice.Init(audioFile);
-                outputDevice.Play();
-                while (outputDevice.PlaybackState == PlaybackState.Playing)
+                using (var audioFile = new AudioFileReader(FinalFile))
+                using (var outputDevice = new WaveOutEvent())
                 {
-                    Thread.Sleep(100);
+                    outputDevice.Init(audioFile);
+                    outputDevice.Play();
+                    while (outputDevice.PlaybackState == PlaybackState.Playing)
+                    {
+                        Thread.Sleep(100);
+                    }
                 }
-            }
+            }).Start();
         }
     }
 }
