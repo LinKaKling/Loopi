@@ -29,6 +29,7 @@ namespace Loopitest.ViewModels
             ButtonVM1 = new ButtonControlViewModel(path1);
             ButtonVM2 = new ButtonControlViewModel(path2);
             ButtonVM3 = new ButtonControlViewModel(path3);
+            ButtonVM1.PlayCommand.Execute(null);
         }
     }
 }
