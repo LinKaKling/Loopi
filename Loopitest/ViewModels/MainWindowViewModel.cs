@@ -11,7 +11,9 @@
 //using System.Windows.Input;
 //using System.Threading;
 
+using LoopiAvalonia.Models.Interfaces;
 using LoopiAvalonia.ViewModels;
+using System.Collections.Generic;
 
 namespace Loopitest.ViewModels
 {
@@ -23,13 +25,21 @@ namespace Loopitest.ViewModels
         public ButtonControlViewModel ButtonVM1 { get; set; }
         public ButtonControlViewModel ButtonVM2 { get; set; }
         public ButtonControlViewModel ButtonVM3 { get; set; }
+        public SequencerControlViewModel Sequencer1 { get; set; }
         public MainWindowViewModel()
         {
-            
+
             ButtonVM1 = new ButtonControlViewModel(path1);
             ButtonVM2 = new ButtonControlViewModel(path2);
             ButtonVM3 = new ButtonControlViewModel(path3);
+            Sequencer1 = new SequencerControlViewModel(new List<ISoundfile>()
+            {
+                {ButtonVM1},
+                {ButtonVM2},
+                {ButtonVM3},
+            });
             ButtonVM1.PlayCommand.Execute(null);
+            Sequencer1.run();
         }
     }
 }

@@ -7,7 +7,6 @@
 
 
 	<StackPanel>
-		
 		<Button Content="Start" Command="{Binding StartCommand}"/>
 		<Button Content="Stop" Command="{Binding StopCommand}"/>
 		<Button Content="Play" Command="{Binding PlayCommand}"/>

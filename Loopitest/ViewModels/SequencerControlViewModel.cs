@@ -1,5 +1,9 @@
 ﻿using LoopiAvalonia.Models;
+using LoopiAvalonia.Models.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace LoopiAvalonia.ViewModels
 {
@@ -9,24 +13,56 @@ namespace LoopiAvalonia.ViewModels
         private int spm;
         private int currentStepNr = 1;
         private Dictionary<int, Step> steps;
+        private int millisPerStep = 1000;
+        public bool isSequencerRunning = true;
+        private IEnumerable<ISoundfile> soundFiles;
+        //public ICommand PlayCommand { get; }
 
-        public SequencerControlViewModel()
+        public SequencerControlViewModel(IEnumerable<ISoundfile> soundFiles)
         {
             spm = 60;
-            numberOfSteps = 16;
+            numberOfSteps = 4;
             steps = new Dictionary<int, Step>();
+            this.soundFiles = soundFiles;
+            //PlayCommand = ReactiveCommand.Create(Fill);
+            soundFiles.Select(x => x.OnPlay += OnPlayFile);
         }
+
+        private void OnPlayFile(object? sender, EventArgs e)
+        {
+            if (sender is ISoundfile soundfile) {
+            
+                if (isSequencerRunning)
+                {
+                    Fill(soundfile);
+                }
+            }
+        }
+
         public void run()
         {
-            //execute step
-            //step++
-            //wait
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    //execute step
+                    if (steps.TryGetValue(currentStepNr, out var step))
+                    {
+                        step.Execute();
+                    }
+                    //step++
+                    currentStepNr++;
+                    if (currentStepNr > numberOfSteps) { currentStepNr = 1; }
+                    //wait
+                    Thread.Sleep(millisPerStep);
+                }
+            }).Start();
         }
         public void restart()
         {
             currentStepNr = 1;
         }
-        public void Fill(ButtonControlViewModel sound)
+        public void Fill(ISoundfile sound)
         {
             if (!steps.TryGetValue(currentStepNr, out var step))
             {

@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using LoopiAvalonia.Models.Interfaces;
+using NAudio.Wave;
 using ReactiveUI;
 using System;
 using System.IO;
@@ -8,7 +9,7 @@ using System.Windows.Input;
 //start Recording wieder an den anfang?
 namespace LoopiAvalonia.ViewModels
 {
-    public class ButtonControlViewModel
+    public class ButtonControlViewModel : ISoundfile
     {
         private static readonly string fileEnding = ".Wav";
         private static readonly string tempSuffix = "_temp";
@@ -18,13 +19,15 @@ namespace LoopiAvalonia.ViewModels
         private bool isRecording;
         private string path;
 
-        private string FinalFile => path + fileEnding;
+        public string Path => path + fileEnding;
         private string TempFile => path + tempSuffix + fileEnding;
         private string BackupFile => path + backupSuffix + fileEnding;
 
         public ICommand StartCommand { get; }
         public ICommand StopCommand { get; }
         public ICommand PlayCommand { get; }
+
+        public EventHandler OnPlay { get; set; }
 
         public ButtonControlViewModel()
             : this("C:\\Temp\\Test0001")
@@ -68,16 +71,16 @@ namespace LoopiAvalonia.ViewModels
 
         private void TempToFinal()
         {
-            var finalInfo = new FileInfo(FinalFile);
+            var finalInfo = new FileInfo(Path);
             var tempInfo = new FileInfo(TempFile);
 
             if (finalInfo.Exists)
             {
-                tempInfo.Replace(FinalFile, BackupFile);
+                tempInfo.Replace(Path, BackupFile);
                 tempInfo.Delete();
             }
             else
-                tempInfo.MoveTo(FinalFile);
+                tempInfo.MoveTo(Path);
         }
 
         private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
@@ -107,11 +110,12 @@ namespace LoopiAvalonia.ViewModels
             StartRecording();
         }
 
-        private void Play()
+        public void Play()
         {
+
             new Thread(() =>
             {
-                using (var audioFile = new AudioFileReader(FinalFile))
+                using (var audioFile = new AudioFileReader(Path))
                 using (var outputDevice = new WaveOutEvent())
                 {
                     outputDevice.Init(audioFile);
@@ -122,6 +126,8 @@ namespace LoopiAvalonia.ViewModels
                     }
                 }
             }).Start();
+            OnPlay?.Invoke(this, EventArgs.Empty);
+            //Sequencer1.Fill(this);
         }
     }
 }

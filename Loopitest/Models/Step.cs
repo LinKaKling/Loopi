@@ -1,4 +1,5 @@
-﻿using LoopiAvalonia.ViewModels;
+﻿using LoopiAvalonia.Models.Interfaces;
+using LoopiAvalonia.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -6,15 +7,23 @@ namespace LoopiAvalonia.Models
 {
     internal class Step
     {
-        private List<ButtonControlViewModel> Buttons { get; }
+        private List<ISoundfile> Buttons { get; }
         public int StepNr { get; }
         public Step()
         {
-            Buttons = new List<ButtonControlViewModel>();
+            Buttons = new List<ISoundfile>();
         }
-        public void AddButton(ButtonControlViewModel button)
+        public void AddButton(ISoundfile button)
         {
             Buttons.Add(button);
+        }
+
+        public void Execute()
+        {
+            foreach (ISoundfile button in Buttons)
+            {
+                button.Play();
+            }
         }
     }
 }
