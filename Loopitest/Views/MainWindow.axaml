@@ -19,6 +19,6 @@
 		<TextBlock Text="Sound2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 		<v:ButtonControl DataContext="{Binding ButtonVM2}"/>
 		<TextBlock Text="Sound3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-		<v:ButtonControl DataContext="{Binding ButtonVM2}"/>
+		<v:ButtonControl DataContext="{Binding ButtonVM3}"/>
 	</StackPanel>
 </Window>

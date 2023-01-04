@@ -2,7 +2,7 @@
 
 namespace LoopiAvalonia.Models.Interfaces
 {
-    public interface ISoundfile
+    public interface ISoundFileControl
     {
         string Path { get; }
         void Play();

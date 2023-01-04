@@ -1,4 +1,5 @@
 ﻿using LoopiAvalonia.Models.Interfaces;
+using Loopitest.ViewModels;
 using NAudio.Wave;
 using ReactiveUI;
 using System;
@@ -6,18 +7,23 @@ using System.IO;
 using System.Threading;
 using System.Windows.Input;
 
-//start Recording wieder an den anfang?
 namespace LoopiAvalonia.ViewModels
 {
-    public class ButtonControlViewModel : ISoundfile
+    public class ButtonControlViewModel : ViewModelBase, ISoundFileControl
     {
         private static readonly string fileEnding = ".Wav";
         private static readonly string tempSuffix = "_temp";
         private static readonly string backupSuffix = "_backup";
         private IWaveIn? waveSource;
         private WaveFileWriter? waveFile;
-        private bool isRecording;
         private string path;
+
+        private bool isRecording;
+        public bool IsRecording
+        {
+            get => isRecording;
+            set => this.RaiseAndSetIfChanged(ref isRecording, value);
+        }
 
         public string Path => path + fileEnding;
         private string TempFile => path + tempSuffix + fileEnding;
@@ -60,13 +66,13 @@ namespace LoopiAvalonia.ViewModels
 
         private void Start()
         {
-            isRecording = true;
+            IsRecording = true;
         }
 
         private void Stop()
         {
             waveSource?.StopRecording();
-            isRecording = false;
+            IsRecording = false;
         }
 
         private void TempToFinal()
@@ -85,7 +91,7 @@ namespace LoopiAvalonia.ViewModels
 
         private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (waveFile != null && isRecording)
+            if (waveFile != null && IsRecording)
             {
                 waveFile.Write(e.Buffer, 0, e.BytesRecorded);
                 waveFile.Flush();
@@ -112,7 +118,6 @@ namespace LoopiAvalonia.ViewModels
 
         public void Play()
         {
-
             new Thread(() =>
             {
                 using (var audioFile = new AudioFileReader(Path))
@@ -127,9 +132,6 @@ namespace LoopiAvalonia.ViewModels
                 }
             }).Start();
             OnPlay?.Invoke(this, EventArgs.Empty);
-            //Sequencer1.Fill(this);
         }
     }
 }
-
-

@@ -7,20 +7,20 @@ namespace LoopiAvalonia.Models
 {
     internal class Step
     {
-        private List<ISoundfile> Buttons { get; }
+        private List<ISoundFileControl> Buttons { get; }
         public int StepNr { get; }
         public Step()
         {
-            Buttons = new List<ISoundfile>();
+            Buttons = new List<ISoundFileControl>();
         }
-        public void AddButton(ISoundfile button)
+        public void AddButton(ISoundFileControl button)
         {
             Buttons.Add(button);
         }
 
         public void Execute()
         {
-            foreach (ISoundfile button in Buttons)
+            foreach (ISoundFileControl button in Buttons)
             {
                 button.Play();
             }

@@ -15,22 +15,20 @@ namespace LoopiAvalonia.ViewModels
         private Dictionary<int, Step> steps;
         private int millisPerStep = 1000;
         public bool isSequencerRunning = true;
-        private IEnumerable<ISoundfile> soundFiles;
-        //public ICommand PlayCommand { get; }
+        private IEnumerable<ISoundFileControl> soundFiles;
 
-        public SequencerControlViewModel(IEnumerable<ISoundfile> soundFiles)
+        public SequencerControlViewModel(IEnumerable<ISoundFileControl> soundFiles)
         {
             spm = 60;
             numberOfSteps = 4;
             steps = new Dictionary<int, Step>();
             this.soundFiles = soundFiles;
-            //PlayCommand = ReactiveCommand.Create(Fill);
-            soundFiles.Select(x => x.OnPlay += OnPlayFile);
+            soundFiles.Select(x => x.OnPlay += OnPlayFile).ToList();
         }
 
         private void OnPlayFile(object? sender, EventArgs e)
         {
-            if (sender is ISoundfile soundfile) {
+            if (sender is ISoundFileControl soundfile) {
             
                 if (isSequencerRunning)
                 {
@@ -58,11 +56,13 @@ namespace LoopiAvalonia.ViewModels
                 }
             }).Start();
         }
+
         public void restart()
         {
             currentStepNr = 1;
         }
-        public void Fill(ISoundfile sound)
+
+        public void Fill(ISoundFileControl sound)
         {
             if (!steps.TryGetValue(currentStepNr, out var step))
             {
@@ -74,5 +74,3 @@ namespace LoopiAvalonia.ViewModels
         }
     }
 }
-
-
