@@ -48,6 +48,7 @@ namespace LoopiAvalonia.ViewModels
             StopCommand = ReactiveCommand.Create(Stop);
             PlayCommand = ReactiveCommand.Create(Play);
 
+            //Es wird durchgehend aufgezeichnet, da es sonst zu Verzögerungen zwischen Aufrufen der Methode und dem Aufzeichnungsstart kommt
             StartRecording();
         }
 
@@ -91,6 +92,7 @@ namespace LoopiAvalonia.ViewModels
 
         private void waveSource_DataAvailable(object sender, WaveInEventArgs e)
         {
+            // Aufnahme wird nur gespeichert wenn auch tatsächlich Aufgenommen werden soll
             if (waveFile != null && IsRecording)
             {
                 waveFile.Write(e.Buffer, 0, e.BytesRecorded);
@@ -112,14 +114,18 @@ namespace LoopiAvalonia.ViewModels
                 waveFile = null;
             }
 
+            //Aufnahme wird zunächst in eine Temporäre Datei, und erst nach Abschluss der Aufnahme in die finale Datei gespeichert. Sonst würden wir neue Aufnamhen immer nur an die alten anhängen.
             TempToFinal();
+            //Die Aufnahme wird direkt wieder gestartet.
             StartRecording();
         }
 
         public void Play()
         {
+            //Play läuft in einem eigenen Thread um nicht den rest des Programms für die Zeit des abspielens lam zu legen.
             new Thread(() =>
             {
+                //Zugriffe auf externe resourcen sollte nur so lange wie nötig erfolgen. Dazu wird hier "using" verwendet.
                 using (var audioFile = new AudioFileReader(Path))
                 using (var outputDevice = new WaveOutEvent())
                 {
@@ -127,6 +133,7 @@ namespace LoopiAvalonia.ViewModels
                     outputDevice.Play();
                     while (outputDevice.PlaybackState == PlaybackState.Playing)
                     {
+                        //HACK: So lange noch abgespielt wird darf die "using" klammer nicht verlassen werden, da sonst der Zugriff auf die nötigen resourcen verlohren geht.
                         Thread.Sleep(100);
                     }
                 }

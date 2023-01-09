@@ -1,18 +1,19 @@
 ﻿using LoopiAvalonia.Models.Interfaces;
-using LoopiAvalonia.ViewModels;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace LoopiAvalonia.Models
 {
+    //WIP! Aktuell ohne Funktion
     internal class Step
     {
         private List<ISoundFileControl> Buttons { get; }
         public int StepNr { get; }
+
         public Step()
         {
             Buttons = new List<ISoundFileControl>();
         }
+
         public void AddButton(ISoundFileControl button)
         {
             Buttons.Add(button);
@@ -20,10 +21,10 @@ namespace LoopiAvalonia.Models
 
         public void Execute()
         {
-            foreach (ISoundFileControl button in Buttons)
-            {
-                button.Play();
-            }
+            //foreach (ISoundFileControl button in Buttons)
+            //{
+            //    button.Play();
+            //}
         }
     }
 }

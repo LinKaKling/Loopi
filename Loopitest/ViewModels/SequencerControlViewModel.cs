@@ -7,6 +7,7 @@ using System.Threading;
 
 namespace LoopiAvalonia.ViewModels
 {
+    //WIP! Bitte ignorieren.
     public class SequencerControlViewModel
     {
         private int numberOfSteps;
